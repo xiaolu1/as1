@@ -51,7 +51,7 @@ public class TodoActivity extends Activity {
 
   
     @Override  
-    public void onCreate(Bundle savedInstanceState) {  
+    protected void onCreate(Bundle savedInstanceState) {  
         super.onCreate(savedInstanceState);  
         setContentView(R.layout.activity_main);  
         bodyText = (EditText)findViewById(R.id.body);
