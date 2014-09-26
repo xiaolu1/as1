@@ -1,6 +1,5 @@
 /*
-This application lets you create a TODO list that allows you to check,
-uncheck, archive, email, and delete the TODOs.
+This application lets you to save a list of todo items and manipulate them.
 
 Copyright (C) 2014 Xiaolu Wang
 
@@ -116,7 +115,7 @@ public class TodoActivity extends Activity {
 
     public void save(View view){
 		String text = bodyText.getText().toString();
-		TodoItem a = new TodoItem(text,0);
+		TodoItem a = new TodoItem(text);
 		todoItems.add(a);
 		adaptertodo.notifyDataSetChanged();
 		bodyText.setText("");
@@ -141,8 +140,8 @@ public class TodoActivity extends Activity {
     			i-=1;
     		}
     	}
-    	dataManager.saveItems(todoItems, FILETODO);
-	dataManager.saveItems(archivedItems, FILEARCH);
+		dataManager.saveItems(todoItems, FILETODO);
+		dataManager.saveItems(archivedItems, FILEARCH);
     	adaptertodo.notifyDataSetChanged();
     	adapterAr.notifyDataSetChanged();
 
@@ -194,8 +193,8 @@ public class TodoActivity extends Activity {
     			j-=1;
     		}
     	}
-    	dataManager.saveItems(todoItems, FILETODO);
-	dataManager.saveItems(archivedItems, FILEARCH);
+		dataManager.saveItems(todoItems, FILETODO);
+		dataManager.saveItems(archivedItems, FILEARCH);
     	adaptertodo.notifyDataSetChanged();
     	adapterAr.notifyDataSetChanged();
     }    
