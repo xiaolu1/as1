@@ -1,15 +1,7 @@
-package com.example.todolist;
+package com.example.as1;
 
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,14 +9,17 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+/* this is the main activity that relate to the main page of the app
 
-public class MainActivity extends ActionBarActivity {
+ */
+public class TodoActivity extends Activity {
 
 
 	private static final String FILETODO = "file1.sav";
 	private static final String FILEARCH = "file2.sav";
 	private static final String FILETEXT = "file3.sav";
 	private static final String FILEEMAIL = "file4.sav";
+
 	private ListView listview;
 	private ArrayList<TodoItem> todoItems;
 	private ArrayList<TodoItem> archivedItems;
@@ -35,6 +30,7 @@ public class MainActivity extends ActionBarActivity {
 	private int totalArchItem;
 	private ArrayList<String> theSummary;
 	private ArrayAdapter<String> summaryViewAdapter;
+	private FileDataManager dataManager;
 
   
     @Override  
@@ -43,6 +39,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);  
         bodyText = (EditText)findViewById(R.id.body);
 		listview = (ListView) findViewById(R.id.todoListView);
+		dataManager = new FileDataManager(this);
 
     }
 	protected void onStart(){
@@ -50,52 +47,58 @@ public class MainActivity extends ActionBarActivity {
 		todoItems=new ArrayList<TodoItem>();
 		archivedItems=new ArrayList<TodoItem>();
 		theSummary=new ArrayList<String>();
-		totalTodoItem=loadItems(todoItems, FILETODO,totalTodoItem);
-		totalArchItem=loadItems(archivedItems, FILEARCH,totalArchItem);
+		todoItems=dataManager.loadItems(FILETODO);
+		totalTodoItem=todoItems.size();
+		archivedItems=dataManager.loadItems(FILEARCH);
+		totalArchItem=archivedItems.size();
 		summaryViewAdapter = new ArrayAdapter<String>(this, R.layout.summarylist, theSummary);
 		adaptertodo = new ListAdapter(this, todoItems);
 		adapterAr = new ListAdapter(this, archivedItems);
-		String theText=read(FILETEXT);
+		String theText=dataManager.read(FILETEXT);
 		bodyText.setText(theText);
 		listview.setAdapter(adaptertodo);
 	}	  
-
+	
+	/*the method will get the data by checking through the todoItems and archivedItems*/
 	public void setsummary(){
 		String temp="";
 		int j;
 		int checkTodo=0;
 		int checkArItem=0;
-		
-		theSummary.clear();
-    	for (j=0;j<totalTodoItem;j++){
-    		if (todoItems.get(j).getChecked()){
-    			checkTodo+=1;
-    		}
-    	}
-    	for (j=0;j<totalArchItem;j++){
-    		if (archivedItems.get(j).getChecked()){
-    			checkArItem+=1;
-    		}
-    	}
+
+	    for (j=0;j<totalTodoItem;j++){
+	    	if (todoItems.get(j).getChecked()){
+	    		checkTodo+=1;
+	    	}
+	    }
+	    for (j=0;j<totalArchItem;j++){
+	    	if (archivedItems.get(j).getChecked()){
+	    			checkArItem+=1;
+	    	}
+	    }
+	    theSummary.clear();
     	temp="Total items: "+(totalTodoItem+totalArchItem);
     	theSummary.add(temp);
-    	temp="TODO items: "+totalTodoItem;
+    	temp="TODO items: "+(totalTodoItem);
     	theSummary.add(temp);
-    	temp="TODO items checked: "+checkTodo;
+    	temp="TODO items checked: "+(checkTodo);
     	theSummary.add(temp);
     	temp="TODO items left unchecked: "+(totalTodoItem-checkTodo);
     	theSummary.add(temp);
-    	temp="Archived TODO items: "+totalArchItem;
+    	temp="Archived TODO items: "+(totalArchItem);
     	theSummary.add(temp);
-    	temp="Checked archived TODO items: "+checkArItem;
+    	temp="Checked archived TODO items: "+(checkArItem);
     	theSummary.add(temp);
     	temp="Unchecked archived TODO items: "+(totalArchItem-checkArItem);
     	theSummary.add(temp);
 	}
 	
+	
+	/*the methods below is defined as the functions for the buttons*/
+
     public void save(View view){
 		String text = bodyText.getText().toString();
-		TodoItem a = new TodoItem(text);
+		TodoItem a = new TodoItem(text,0);
 		todoItems.add(a);
 		adaptertodo.notifyDataSetChanged();
 		bodyText.setText("");
@@ -128,6 +131,8 @@ public class MainActivity extends ActionBarActivity {
     	String emailText = "";
     	String temp="";
     	int i;
+    	
+    	/*set the email to do part to String and save it in the email file*/
     	for (i=0;i<totalTodoItem;i++){
     		if (todoItems.get(i).getChecked()){
     			temp=todoItems.get(i).getBody().replaceAll("\n", "\n                    ");
@@ -141,12 +146,10 @@ public class MainActivity extends ActionBarActivity {
     			emailText=emailText+"Archived item: "+temp+"\n";
     		}
     	}
-		write(emailText,FILEEMAIL);
-		Intent intent = new Intent(MainActivity.this, SendEmail.class);
-		MainActivity.this.startActivity(intent);
+    	dataManager.write(emailText,FILEEMAIL);
+		Intent intent = new Intent(TodoActivity.this, SendEmail.class);
+		TodoActivity.this.startActivity(intent);
 
-        //String strTmp="email";  
-        //bodyText.setText(strTmp);  
     }
     public void archive(View view){
     	int j;
@@ -184,63 +187,15 @@ public class MainActivity extends ActionBarActivity {
 		summaryViewAdapter.notifyDataSetChanged();
 		listview.setAdapter(summaryViewAdapter);
     }
-
-	public void saveItems(List<TodoItem> lts, String filename) {
-        try {  
-            FileOutputStream fos = openFileOutput(filename, MODE_PRIVATE);  
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(lts);
-            fos.close();  
-        } catch (Exception e) {  
-        	String ex = e.toString();
-            bodyText.setText(ex);
-        }  
-	}
-    public int loadItems(ArrayList<TodoItem> aim, String filename, int theSize) {
-		ArrayList<TodoItem> lts = new ArrayList<TodoItem>();
-        try {  
-            FileInputStream inputStream = openFileInput(filename);  
-			ObjectInputStream ois = new ObjectInputStream(inputStream);
-			lts = (ArrayList<TodoItem>) ois.readObject();
-			inputStream.close();  
-
-        } catch (Exception e) {  
-        }
-        aim.clear();
-        int a;
-        theSize=lts.size();
-        for (a=0;a<theSize;a++){
-        	aim.add(lts.get(a));
-        }
-        return theSize;
-	}
-    private String read(String filename) {  
-        try {  
-            FileInputStream inputStream = openFileInput(filename);  
-            byte[] b = new byte[inputStream.available()];  
-            inputStream.read(b);  
-            return new String(b);  
-        } catch (Exception e) {  
-        }  
-        return null;  
-    }  
-  
-    private void write(String content,String filename) {  
-        try {  
-            FileOutputStream fos = openFileOutput(filename, MODE_PRIVATE);  
-            fos.write(content.getBytes());  
-            fos.close();  
-        } catch (Exception e) {  
-        }  
-    }  
+	/*the methods for buttons end*/
     
+    /*the stop of the activity will save all the data*/
     protected void onStop(){
-        super.onStop();  
-		saveItems(todoItems, FILETODO);
-		saveItems(archivedItems, FILEARCH);
+        super.onStop();
+		dataManager.saveItems(todoItems, FILETODO);
+		dataManager.saveItems(archivedItems, FILEARCH);
 		String text = bodyText.getText().toString();
-		write(text,FILETEXT);
-		
+		dataManager.write(text,FILETEXT);
 
     }  
 

@@ -1,19 +1,19 @@
-package com.example.todolist;
+package com.example.as1;
 
 import java.io.Serializable;
 
+
+/*here is the class of items that represent every todoitems*/
 public class TodoItem implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 7571026170589588634L;
 	private String todobody;
 	private boolean checked=false;
 	private int archived;
-	//private static int total
 	
-	TodoItem(String name){
+	TodoItem(String name,int number){
 		this.todobody=name;
+		this.archived=number;
 	}
 	public String getBody(){
 		return this.todobody;
