@@ -1,10 +1,12 @@
 as1
 ===
 
-Usage:
 This is the readme file for my first assignment TODO list application.
 This application can add, archive, email or delete the TODO items.
-It will require the user to type on the eidttext and press the button save to add item in the todoList.
+
+Usage:
+
+The application will require the user to type on the eidttext and press the button save to add item in the todoList.
 When the users press the delete button, it will delete all items that are checked in the todoList and the archivedList.
 When the users press the archive button, it will put all checked todo items into the archivedList and put all checked archived items into the todoList.
 When the users press email, it will get to a new page and ask the user for the emaill address. Then the app will call an app that can send email and send email for the users. The email address is set to be the input from the users and the subject is set to be "Selected Todo items from the TODO list application". And the body of email will be the checked todo items and archived items before the user press the email buttom.
@@ -14,11 +16,13 @@ The summary view will show the count for different types of items.
 The items will save automatically after the user change it.
 
 Notice:
+
 Pay attention to the usage of the check box, the checked item will not be unchecked as the user change views. The functions delete, archive and email will include all checked items.
 The save button will always save the input in the todoList even if it is not in the todo view.
 
 
 Source of the code:
+
 In this assignment, I use the code of our lab. The part of the TodoItem, part of TodoActivity and most part of FileDataManager was was writen based on LonelyTwitterGson.
 
 I also use the Stephen Just's code for the TodoCheckboxListener. Below is the license.
