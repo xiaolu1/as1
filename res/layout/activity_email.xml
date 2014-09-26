@@ -39,7 +39,7 @@
     android:layout_alignTop="@+id/to"
     android:layout_toEndOf="@+id/msgtitle"
     android:ems="10"
-    android:hint="@string/email"
+    android:hint="Email Address"
     android:inputType="textEmailAddress" />
         
 </RelativeLayout>
