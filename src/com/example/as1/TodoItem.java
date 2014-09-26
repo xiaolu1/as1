@@ -9,11 +9,9 @@ public class TodoItem implements Serializable{
 	private static final long serialVersionUID = 7571026170589588634L;
 	private String todobody;
 	private boolean checked=false;
-	private int archived;
 	
-	TodoItem(String name,int number){
+	TodoItem(String name){
 		this.todobody=name;
-		this.archived=number;
 	}
 	public String getBody(){
 		return this.todobody;
@@ -25,14 +23,5 @@ public class TodoItem implements Serializable{
 		this.checked=check;
 	}
 
-	public void archive(){
-		this.archived=1;
-	}
-	public void unarchive(){
-		this.archived=0;
-	}
-	public int getArchived(){
-		return archived;
-	}
 	
 }
