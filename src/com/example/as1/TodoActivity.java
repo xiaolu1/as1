@@ -121,6 +121,8 @@ public class TodoActivity extends Activity {
 		bodyText.setText("");
 		totalTodoItem+=1;
 		dataManager.saveItems(todoItems, FILETODO);
+		setsummary();
+		summaryViewAdapter.notifyDataSetChanged();
 
     }
     
@@ -144,6 +146,8 @@ public class TodoActivity extends Activity {
 		dataManager.saveItems(archivedItems, FILEARCH);
     	adaptertodo.notifyDataSetChanged();
     	adapterAr.notifyDataSetChanged();
+    	setsummary();
+    	summaryViewAdapter.notifyDataSetChanged();
 
     }
     
@@ -197,6 +201,8 @@ public class TodoActivity extends Activity {
 		dataManager.saveItems(archivedItems, FILEARCH);
     	adaptertodo.notifyDataSetChanged();
     	adapterAr.notifyDataSetChanged();
+    	setsummary();
+    	summaryViewAdapter.notifyDataSetChanged();
     }    
     public void todoview(View view){
 		listview.setAdapter(adaptertodo);
