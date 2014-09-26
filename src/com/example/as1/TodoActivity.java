@@ -121,6 +121,7 @@ public class TodoActivity extends Activity {
 		adaptertodo.notifyDataSetChanged();
 		bodyText.setText("");
 		totalTodoItem+=1;
+		dataManager.saveItems(todoItems, FILETODO);
 
     }
     
@@ -140,6 +141,8 @@ public class TodoActivity extends Activity {
     			i-=1;
     		}
     	}
+    	dataManager.saveItems(todoItems, FILETODO);
+	dataManager.saveItems(archivedItems, FILEARCH);
     	adaptertodo.notifyDataSetChanged();
     	adapterAr.notifyDataSetChanged();
 
@@ -191,6 +194,8 @@ public class TodoActivity extends Activity {
     			j-=1;
     		}
     	}
+    	dataManager.saveItems(todoItems, FILETODO);
+	dataManager.saveItems(archivedItems, FILEARCH);
     	adaptertodo.notifyDataSetChanged();
     	adapterAr.notifyDataSetChanged();
     }    
